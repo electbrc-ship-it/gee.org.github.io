@@ -18,9 +18,28 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
+        html, body {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             scroll-behavior: smooth;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Fix iOS background-attachment: fixed issue */
+        @media (max-width: 767px) {
+            .bg-industrial-fixed {
+                background-attachment: scroll !important;
+            }
+            .nav-hero {
+                background-attachment: scroll !important;
+            }
         }
 
         .bg-industrial-fixed {
@@ -263,8 +282,8 @@
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center">
                             <div className="flex items-center gap-5">
-                                <img src="assets/logo.png?v=custom_logo" alt="GEE Logo" className="w-24 h-24 object-contain" />
-                                <img src="assets/logo_text.png" alt="Global Engineering Enterprises" className="h-14 w-auto object-contain ml-3" />
+                                <img src="assets/logo.png?v=custom_logo" alt="GEE Logo" className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 object-contain" />
+                                <img src="assets/logo_text.png" alt="Global Engineering Enterprises" className="h-8 sm:h-11 md:h-14 w-auto object-contain ml-2 sm:ml-3" />
                             </div>
                             
                             <div className="hidden md:flex items-center space-x-8">
@@ -283,8 +302,8 @@
                             </div>
 
                             <div className="md:hidden">
-                                <button onClick={() => setIsOpen(!isOpen)} className="text-white">
-                                    {isOpen ? <Icon name="x" /> : <Icon name="menu" />}
+                                <button onClick={() => setIsOpen(!isOpen)} className="text-white w-11 h-11 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors" aria-label="Toggle navigation menu">
+                                    {isOpen ? <Icon name="x" className="w-6 h-6" /> : <Icon name="menu" className="w-6 h-6" />}
                                 </button>
                             </div>
                         </div>
@@ -292,13 +311,13 @@
                     
                     {isOpen && (
                         <div className="md:hidden bg-slate-900 border-b border-white/10 overflow-hidden shadow-2xl">
-                            <div className="px-4 py-6 space-y-4">
+                            <div className="px-4 py-4 space-y-1">
                                 {navLinks.map((link) => (
-                                    <a key={link.name} href={link.href} onClick={() => setIsOpen(false)} className={`block text-lg font-medium ${link.name === 'Services' ? 'text-teal-400' : 'text-white/90'} hover:text-teal-400`}>
+                                    <a key={link.name} href={link.href} onClick={() => setIsOpen(false)} className={`block py-3 px-2 text-base font-medium ${link.name === 'Services' ? 'text-teal-400' : 'text-white/90'} hover:text-teal-400 rounded-lg hover:bg-white/5 transition-all min-h-[44px] flex items-center`}>
                                         {link.name}
                                     </a>
                                 ))}
-                                <a href="index.html#contact" onClick={() => setIsOpen(false)} className="block w-full text-center py-3 bg-teal-600 text-white rounded-lg font-semibold">
+                                <a href="index.html#contact" onClick={() => setIsOpen(false)} className="block w-full text-center py-3 mt-2 bg-teal-600 text-white rounded-lg font-semibold min-h-[44px] flex items-center justify-center">
                                     Contact Us
                                 </a>
                             </div>
@@ -309,7 +328,7 @@
         };
 
         const ServicesPageHero = () => (
-            <section className="relative pt-32 pb-20 bg-slate-900 overflow-hidden">
+            <section className="relative pt-20 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 bg-slate-900 overflow-hidden">
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                     <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
                     <div className="absolute inset-0 bg-industrial-fixed"></div>
@@ -318,10 +337,10 @@
                     <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-teal-400 uppercase bg-teal-400/10 rounded-full">
                         Expert Solutions
                     </span>
-                    <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+                    <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
                         Our Engineering <span className="text-gradient">Services</span>
                     </h1>
-                    <p className="text-lg text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto">
+                    <p className="text-sm sm:text-base lg:text-lg text-slate-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto">
                         Comprehensive solutions across the entire lifecycle of power and industrial plants. From concept to commissioning.
                     </p>
                 </div>
@@ -344,7 +363,7 @@
                                             <img 
                                                 src={category.image} 
                                                 alt={category.title} 
-                                                className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-105"
+                                                className="w-full h-[220px] sm:h-[320px] lg:h-[450px] object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
                                             <div className="absolute bottom-10 left-10">
@@ -394,7 +413,7 @@
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-4xl font-bold mb-8">Ready to Start Your Project?</h2>
                     <p className="text-slate-400 mb-10 max-w-2xl mx-auto">Contact our expert team today for a comprehensive consultation on your engineering needs.</p>
-                    <a href="index.html#contact" className="px-10 py-5 bg-teal-600 text-white rounded-xl font-bold text-lg hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20">
+                    <a href="index.html#contact" className="inline-block px-8 sm:px-10 py-4 sm:py-5 bg-teal-600 text-white rounded-xl font-bold text-base sm:text-lg hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20 min-h-[44px]">
                         Get in Touch
                     </a>
                 </div>
