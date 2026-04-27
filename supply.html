@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Supply & Inventory | Global Engineering Enterprises</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    
+    <!-- Scripts & Styles -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .bg-industrial-fixed {
+            background-image: url('assets/Industrial sunset with working machinery.png?v=bg_v1');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .nav-hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.4)), url('assets/Industrial sunset with working machinery.png?v=bg_v1');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center top;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-scrolled {
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #0d9488 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Data ---
+        const supplyCategories = [
+            {
+                id: 1,
+                title: 'Power Transformers (EHV/HV)',
+                icon: 'zap',
+                image: 'assets/power transformer.jpg',
+                items: [
+                    'Power Transformers (GSU, ICT, Auto, HVDC)',
+                    'Ratings up to 2000+ MVA',
+                    '765kV / 400kV / 220kV / 132kV Class',
+                    'Phase Shifting & Furnace Transformers'
+                ],
+                specs: {
+                    use: 'Main grid inter-connections and generation step-up',
+                    ratings: '50 MVA to 2000 MVA',
+                    voltage: 'Up to 765 kV',
+                    cooling: 'ONAN / ONAF / OFAF / ODWF',
+                    standards: 'IEC 60076, IS 2026',
+                    make: 'ABB, Siemens, GE, BHEL (Equivalent Supply)'
+                }
+            },
+            {
+                id: 2,
+                title: 'Distribution Transformers',
+                icon: 'zap-off',
+                image: 'assets/ditribution transformers.jpg',
+                items: [
+                    'Oil Filled & Dry Type (VPI/CRT)',
+                    'Pole Mounted Distribution Transformers',
+                    'Isolation & Rectifier Transformers',
+                    'Earthing Transformers & Neutral Grounding'
+                ],
+                specs: {
+                    use: 'Step-down distribution for industrial and residential loads',
+                    ratings: '10 KVA to 5000 KVA',
+                    voltage: '11kV/0.415kV, 33kV/0.415kV',
+                    type: 'Hermetically Sealed / Conservator Type',
+                    efficiency: 'Energy Efficiency Level 1, 2 & 3 (as per BEE)',
+                    make: 'Voltamp, Raychem, Schneider (Equivalent Supply)'
+                }
+            },
+            {
+                id: 3,
+                title: 'Compact Substations (CSS)',
+                icon: 'box',
+                image: 'assets/css.jpg',
+                items: [
+                    'Unitized Substations (USS)',
+                    'Skid Mounted Mobile Substations',
+                    'Pad Mounted Transformers',
+                    'Prefabricated Enclosures (IP54/55)'
+                ],
+                specs: {
+                    use: 'Space-saving outdoor power distribution nodes',
+                    ratings: '100 KVA to 3150 KVA',
+                    components: 'MV Switchgear + Transformer + LV Panel',
+                    enclosure: 'Galvanized Steel / Aluminum Magnesium Alloy',
+                    protection: 'IP54 / IP55 Weatherproof',
+                    model: 'GEE-CSS Premium Series'
+                }
+            },
+            {
+                id: 4,
+                title: 'Transmission Line Material',
+                icon: 'activity',
+                image: 'assets/tranmission material.png',
+                items: [
+                    'ACSR / AAAC Conductors',
+                    'Pin, Disc & Post Insulators',
+                    'Cross Arms & Stay Sets',
+                    'Earthing Sets & Hardware Fittings'
+                ],
+                specs: {
+                    use: 'Overhead power transmission and distribution lines',
+                    conductor: 'Dog, Panther, Zebra, Moose (ACSR)',
+                    insulators: 'Porcelain / Polymer (up to 765kV)',
+                    bearing: 'High tensile strength for long spans',
+                    coating: 'Hot Dip Galvanized (80-100 microns)',
+                    compliance: 'REC Standards / IS Specifications'
+                }
+            },
+            {
+                id: 5,
+                title: 'Towers & Poles',
+                icon: 'tower-control',
+                image: 'assets/towers and poles.png',
+                items: [
+                    'Towers (33kV to 765kV)',
+                    'PCC & Steel Tubular Poles',
+                    'Lattice Structures & Gantries',
+                    'Fabricated Steel Structures'
+                ],
+                specs: {
+                    use: 'Structural support for overhead lines and switchyards',
+                    material: 'High Tensile Structural Steel (Grade E250/E350)',
+                    height: 'Up to 60 Meters (Towers)',
+                    capacity: 'Wind Zone 4 & 5 compliant design',
+                    galvanization: 'IS 2629 / IS 4759 Standards',
+                    type: 'Suspension, Tension, Dead-end'
+                }
+            },
+            {
+                id: 6,
+                title: 'Civil & Structural Material',
+                icon: 'hammer',
+                image: 'assets/ChatGPT Image Apr 27, 2026, 02_36_20 PM.png',
+                items: [
+                    'Foundation Bolts & Base Plates',
+                    'RCC & PCC Materials',
+                    'Structural Steel (Columns & Beams)',
+                    'Fencing & Gate Material'
+                ],
+                specs: {
+                    use: 'Plant foundations and structural framing',
+                    bolts: 'High strength anchor bolts (8.8 / 10.9 grade)',
+                    steel: 'IS 2062 Gr. B / ASTM A36',
+                    concrete: 'M20, M25, M30 Design Mix ready',
+                    fabrication: 'Customized as per GA drawings',
+                    finish: 'Epoxy Painted / Galvanized'
+                }
+            },
+            {
+                id: 7,
+                title: 'Mechanical Equipment',
+                icon: 'cog',
+                image: 'assets/mehanical.png',
+                items: [
+                    'Turbines, Boilers & Condensers',
+                    'IBR & Non-IBR Piping Systems',
+                    'Industrial Valves (Gate/Globe/Butterfly)',
+                    'Cooling Towers & Pumps'
+                ],
+                specs: {
+                    use: 'Power plant thermal and fluid systems',
+                    piping: 'ASTM A106 Gr. B / A335 (Alloy Steel)',
+                    valves: 'Class 150 to 2500 pressure ratings',
+                    pumps: 'Centrifugal / Vertical Turbine types',
+                    boiler: 'High pressure steam generation units',
+                    compliance: 'ASME Section I & VIII / IBR 1950'
+                }
+            },
+            {
+                id: 8,
+                title: 'HT Switchgear (VCB/SF6)',
+                icon: 'shield',
+                image: 'assets/vcb.png',
+                items: [
+                    'Vacuum Circuit Breakers (VCB) up to 33kV',
+                    'SF6 Gas Insulated Switchgear (GIS)',
+                    'Air Insulated Switchgear (AIS)',
+                    'Load Break Switches (LBS) & RMUs'
+                ],
+                specs: {
+                    use: 'High voltage circuit protection and control',
+                    ratings: 'Up to 33kV, 3150A, 40kA',
+                    operation: 'Motorized / Manual spring charge',
+                    enclosure: 'Metal clad, Indoor/Outdoor type',
+                    protection: 'Numerical Relay integrated',
+                    make: 'Siemens, ABB, Schneider, L&T'
+                }
+            },
+            {
+                id: 9,
+                title: 'LT Panels (PCC/MCC)',
+                icon: 'layout',
+                image: 'assets/LT panels.png',
+                items: [
+                    'Power Control Centers (PCC)',
+                    'Motor Control Centers (MCC)',
+                    'APFC Panels & Capacitor Banks',
+                    'AMF & Synchronizing Panels'
+                ],
+                specs: {
+                    use: 'Low voltage power distribution and motor control',
+                    ratings: 'Up to 6300A, 415V, 50kA/1sec',
+                    form: 'Form 3b / 4b separation',
+                    busbar: 'Electrolytic grade Copper / Aluminum',
+                    ingress: 'IP42 to IP55 protection',
+                    type: 'Fixed / Draw-out type'
+                }
+            },
+            {
+                id: 10,
+                title: 'Power & Control Cables',
+                icon: 'layers',
+                image: 'assets/power cables.png',
+                items: [
+                    'HT/LT XLPE & PVC Power Cables',
+                    'Shielded Control & Instrumentation Cables',
+                    'Fire Survival & FRLS Cables',
+                    'Cable Trays & Raceways'
+                ],
+                specs: {
+                    use: 'Inter-equipment power and signal connectivity',
+                    voltage: '1.1kV (LT) to 33kV (HT)',
+                    conductor: 'Annealed Copper / Aluminum',
+                    insulation: 'XLPE / PVC / Silicone Rubber',
+                    sheath: 'FRLS / LSZH / Outer PVC',
+                    make: 'Polycab, KEI, Finolex, Havells'
+                }
+            },
+            {
+                id: 11,
+                title: 'HT & LT Industrial Motors',
+                icon: 'settings',
+                image: 'assets/ht motors.png',
+                items: [
+                    'HT Motors (up to 11kV, 18MW+)',
+                    'LT Squirrel Cage & Slip Ring Motors',
+                    'Explosion Proof & Flame Proof Motors',
+                    'Variable Frequency Drives (VFD)'
+                ],
+                specs: {
+                    use: 'Industrial drive applications for pumps, fans, conveyors',
+                    power: '0.37 kW to 18,000 kW',
+                    efficiency: 'IE2, IE3, IE4 Premium Efficiency',
+                    protection: 'IP55 / IP56, Class F Insulation',
+                    cooling: 'IC411 (Self) / IC416 (Forced)',
+                    make: 'ABB, Siemens, WEG, Crompton'
+                }
+            },
+            {
+                id: 12,
+                title: 'DG Sets & Power Backup',
+                icon: 'battery-charging',
+                image: 'assets/DG sets.png',
+                items: [
+                    'Diesel Generator Sets (10kVA - 2500kVA)',
+                    'Industrial Online UPS Systems',
+                    'Ni-Cd / Lithium-ion / SMF Battery Banks',
+                    'Battery Chargers & DC Systems'
+                ],
+                specs: {
+                    use: 'Emergency standby and critical power backup',
+                    capacity: '10 kVA to 2500 kVA',
+                    engine: 'Cummins, Perkins, Kirloskar',
+                    alternator: 'Stamford, Leroy Somer',
+                    ups_type: 'Double Conversion Online',
+                    automation: 'AMF Panel integrated'
+                }
+            },
+            {
+                id: 13,
+                title: 'Automation & SCADA',
+                icon: 'monitor',
+                image: 'assets/scada.png',
+                items: [
+                    'Distributed Control Systems (DCS)',
+                    'PLC Panels & SCADA Integration',
+                    'Smart Energy Management Systems',
+                    'Field Instruments (Flow, Level, Pressure)'
+                ],
+                specs: {
+                    use: 'Plant-wide monitoring and process control',
+                    controllers: 'Siemens S7, Allen Bradley, ABB 800xA',
+                    software: 'WinCC, Wonderware, RSView',
+                    protocol: 'Modbus, Profibus, Ethernet/IP',
+                    accuracy: '0.1% for precision field instruments',
+                    interface: 'HMI / Industrial PC based'
+                }
+            },
+            {
+                id: 14,
+                title: 'Instrumentation Fittings',
+                icon: 'thermometer',
+                image: 'assets/fittings.png',
+                items: [
+                    'Impulse Tubing & Fittings',
+                    'Manifolds & Gauge Accessories',
+                    'Calibration Tools & Test Gauges',
+                    'Thermowells & Sensor Housings'
+                ],
+                specs: {
+                    use: 'Precision sensing and measurement connections',
+                    material: 'SS 316 / SS 316L / Monel',
+                    pressure: 'Up to 10,000 PSI',
+                    size: '1/4" to 2" OD Tubing',
+                    thread: 'NPT / BSPP / Compression',
+                    certification: 'NACE compliant available'
+                }
+            },
+            {
+                id: 15,
+                title: 'Industrial Safety Gear',
+                icon: 'shield-alert',
+                image: 'assets/safety.png',
+                items: [
+                    'Arc Flash Suits & Helmets',
+                    'Insulated Mats & Gloves',
+                    'Lockout Tagout (LOTO) Kits',
+                    'Safety Harnesses & Fall Protection'
+                ],
+                specs: {
+                    use: 'Personnel protection during O&M activities',
+                    arc_rating: '8 cal/cm² to 100 cal/cm²',
+                    insulation: 'Class 0 to Class 4 (up to 36kV)',
+                    mats: 'ASTM D178 / IS 15652 Standards',
+                    harness: 'Full body, multi-point adjustment',
+                    brand: '3M, Honeywell, Karam, Honeywell'
+                }
+            }
+        ];
+
+        // --- Components ---
+
+        const Icon = ({ name, className }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} className={className}></i>;
+        };
+
+        const Navbar = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [scrolled, setScrolled] = useState(false);
+            const [isPastHero, setIsPastHero] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 20);
+                    setIsPastHero(window.scrollY > 400);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const navLinks = [
+                { name: 'Home', href: 'index.html#home' },
+                { name: 'About', href: 'index.html#about' },
+                { name: 'Services', href: 'services.html' },
+                { name: 'Supply', href: 'supply.html' },
+                { name: 'Energy', href: 'index.html#energy' },
+                { name: 'Contact', href: 'index.html#contact' },
+            ];
+
+            return (
+                <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isPastHero ? 'nav-scrolled py-2' : (scrolled ? 'nav-hero py-2.5' : 'bg-transparent py-4')}`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-5">
+                                <img src="assets/logo.png?v=custom_logo" alt="GEE Logo" className="w-24 h-24 object-contain" />
+                                <img src="assets/logo_text.png" alt="Global Engineering Enterprises" className="h-14 w-auto object-contain ml-3" />
+                            </div>
+                            
+                            <div className="hidden md:flex items-center space-x-8">
+                                {navLinks.map((link) => (
+                                    <a 
+                                        key={link.name} 
+                                        href={link.href} 
+                                        className={`text-sm font-medium transition-colors hover:text-teal-500 ${link.name === 'Supply' ? 'text-teal-400 font-bold' : 'text-white/90'}`}
+                                    >
+                                        {link.name}
+                                    </a>
+                                ))}
+                                <a href="index.html#contact" className="px-5 py-2.5 bg-teal-600 text-white rounded-full text-sm font-semibold hover:bg-teal-700 transition-all shadow-lg shadow-teal-500/30">
+                                    Get in Touch
+                                </a>
+                            </div>
+
+                            <div className="md:hidden">
+                                <button onClick={() => setIsOpen(!isOpen)} className="text-white">
+                                    {isOpen ? <Icon name="x" /> : <Icon name="menu" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {isOpen && (
+                        <div className="md:hidden bg-slate-900 border-b border-white/10 overflow-hidden shadow-2xl">
+                            <div className="px-4 py-6 space-y-4">
+                                {navLinks.map((link) => (
+                                    <a key={link.name} href={link.href} onClick={() => setIsOpen(false)} className={`block text-lg font-medium ${link.name === 'Supply' ? 'text-teal-400' : 'text-white/90'} hover:text-teal-400`}>
+                                        {link.name}
+                                    </a>
+                                ))}
+                                <a href="index.html#contact" onClick={() => setIsOpen(false)} className="block w-full text-center py-3 bg-teal-600 text-white rounded-lg font-semibold">
+                                    Contact Us
+                                </a>
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const SupplyPageHero = () => (
+            <section className="relative pt-32 pb-20 bg-slate-900 overflow-hidden">
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
+                    <div className="absolute inset-0 bg-industrial-fixed"></div>
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                    <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-teal-400 uppercase bg-teal-400/10 rounded-full">
+                        Industrial Inventory
+                    </span>
+                    <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+                        Supply & <span className="text-gradient">Equipment</span>
+                    </h1>
+                    <p className="text-lg text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto">
+                        High-performance engineering components, from extra-high voltage transformers to precision automation systems.
+                    </p>
+                </div>
+            </section>
+        );
+
+        const SpecificationModal = ({ category, onClose }) => {
+            if (!category) return null;
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+                    <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-md" onClick={onClose}></div>
+                    <div className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
+                        <div className="relative h-64 sm:h-80 overflow-hidden">
+                            <img src={category.image} alt={category.title} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+                            <button onClick={onClose} className="absolute top-6 right-6 w-12 h-12 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-slate-900 transition-all border border-white/30">
+                                <Icon name="x" className="w-6 h-6" />
+                            </button>
+                            <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-10">
+                                <h2 className="text-3xl sm:text-4xl font-black text-slate-900">{category.title}</h2>
+                            </div>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-8 sm:p-10 no-scrollbar">
+                            <div className="grid md:grid-cols-2 gap-10">
+                                <div>
+                                    <h3 className="text-sm font-bold text-teal-600 uppercase tracking-widest mb-6">Product Details</h3>
+                                    <div className="space-y-6">
+                                        {Object.entries(category.specs).map(([key, value]) => (
+                                            <div key={key}>
+                                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{key.replace('_', ' ')}</p>
+                                                <p className="text-slate-800 font-semibold">{value}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-bold text-teal-600 uppercase tracking-widest mb-6">Included Items</h3>
+                                    <div className="grid gap-3">
+                                        {category.items.map((item, idx) => (
+                                            <div key={idx} className="p-3 bg-slate-50 rounded-xl flex items-center gap-3">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-teal-400"></div>
+                                                <span className="text-slate-700 font-medium text-sm">{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const SupplyList = () => {
+            const [selectedCategory, setSelectedCategory] = useState(null);
+            return (
+                <section className="py-24 bg-slate-50 overflow-hidden">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {supplyCategories.map((category, idx) => (
+                                <div key={category.id} data-aos="fade-up" data-aos-delay={idx * 50} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col">
+                                    <div className="relative h-64 overflow-hidden">
+                                        <img src={category.image} alt={category.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-60"></div>
+                                        <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3">
+                                            <div className="p-2 bg-teal-500 rounded-lg text-white shadow-lg"><Icon name={category.icon} className="w-5 h-5" /></div>
+                                            <h4 className="text-xl font-bold text-white leading-tight">{category.title}</h4>
+                                        </div>
+                                    </div>
+                                    <div className="p-8 flex-1">
+                                        <ul className="space-y-4">
+                                            {category.items.slice(0, 4).map((item, iIdx) => (
+                                                <li key={iIdx} className="flex items-start gap-3"><div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-teal-400"></div><span className="text-slate-600 text-sm font-medium">{item}</span></li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    <div className="px-8 pb-8 pt-4">
+                                        <button onClick={() => setSelectedCategory(category)} className="w-full py-3 bg-slate-50 text-teal-600 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-teal-600 hover:text-white transition-all shadow-sm">
+                                            View Specifications <Icon name="arrow-up-right" className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        {selectedCategory && <SpecificationModal category={selectedCategory} onClose={() => setSelectedCategory(null)} />}
+                    </div>
+                </section>
+            );
+        };
+
+        const ContactSummary = () => (
+            <section className="py-24 bg-slate-900 text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 className="text-4xl font-bold mb-8">Ready to Start Your Project?</h2>
+                    <p className="text-slate-400 mb-10 max-w-2xl mx-auto">Contact our expert team today for a comprehensive consultation on your engineering needs.</p>
+                    <a href="index.html#contact" className="px-10 py-5 bg-teal-600 text-white rounded-xl font-bold text-lg hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20">
+                        Get in Touch
+                    </a>
+                </div>
+            </section>
+        );
+
+        const Footer = () => (
+            <footer className="bg-slate-900 border-t border-white/5 py-8 text-center text-slate-400">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <p>
+                        Get in touch: <a href="mailto:global.engr.in@gmail.com" className="text-teal-400 hover:text-teal-300">global.engr.in@gmail.com</a> | <span className="text-white">+91 8875546393</span>
+                    </p>
+                </div>
+            </footer>
+        );
+
+        const App = () => {
+            useEffect(() => {
+                if (window.AOS) window.AOS.init({ duration: 800, once: true });
+            }, []);
+            return (
+                <div className="min-h-screen bg-slate-50">
+                    <Navbar />
+                    <SupplyPageHero />
+                    <SupplyList />
+                    <ContactSummary />
+                    <Footer />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
+

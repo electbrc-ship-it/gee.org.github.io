@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Engineering Enterprises | EPC & Industrial Solutions</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+
+    <!-- Scripts & Styles -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)), url('assets/Industrial sunset with working machinery.png?v=bg_v1');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bg-industrial-fixed {
+            background-image: url('assets/Industrial sunset with working machinery.png?v=bg_v1');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .nav-hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.4)), url('assets/Industrial sunset with working machinery.png?v=bg_v1');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center top;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-scrolled {
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #0d9488 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Data ---
+        const serviceCategories = [
+            {
+                id: '1',
+                title: 'Installation',
+                description: 'Expert erection and installation of critical industrial and power systems infrastructure.',
+                image: 'assets/service_installation.jpg',
+                bullets: [
+                    'Substation 11/25/33/66/132/400KV equipment erection',
+                    'Over Head/Underground transmission lines laying',
+                    'HT/LT Cable laying, jointing and terminations',
+                    'Plant earthing and lightening protection systems',
+                    'Installation of HT/LT Panels, LBS, RMU, Transformers',
+                    'Equipment material handling and alignment'
+                ]
+            },
+            {
+                id: '2',
+                title: 'Testing',
+                description: 'Comprehensive diagnostic and performance testing for electrical and mechanical systems.',
+                image: 'assets/service_testing.jpg?v=custom',
+                bullets: [
+                    'Pre-commissioning testing of HT/LT panels and switchgears',
+                    'Relay testing and retrofitting',
+                    'Transformer oil filtration and testing',
+                    'Cable fault location and diagnostics',
+                    'Motor Operated Valves (MOVs) & Dampers (MODs) testing'
+                ]
+            },
+            {
+                id: '3',
+                title: 'Commissioning',
+                description: 'Systematic procedures to ensure all components of the industrial plant perform according to design objectives.',
+                image: 'assets/service_commissioning.jpg?v=custom2',
+                bullets: [
+                    'Pre-commissioning & Commissioning procedures execution',
+                    'Back charging plan and implementation',
+                    'Start up & Shutdown procedures coordination',
+                    'System integration and functional checks',
+                    'Performance evaluation and handover'
+                ]
+            },
+            {
+                id: '4',
+                title: 'Operation & Maintenance (O&M)',
+                description: 'End-to-end operation management and maintenance of power systems to ensure zero downtime.',
+                image: 'assets/service_onm.jpg?v=custom_onm',
+                bullets: [
+                    'Preventative & Breakdown Maintenance',
+                    'Control room/DCS Panel operation',
+                    '24/7 technical support for industrial plants',
+                    'Routine checking of HT/LT Motors and Transformers',
+                    'Plant illumination and lighting maintanance'
+                ]
+            },
+            {
+                id: '5',
+                title: 'Solar Power Systems',
+                description: 'End-to-end installation of Hybrid, On-Grid, and Off-Grid solar energy systems.',
+                image: 'assets/service_solar.jpg?v=custom_solar',
+                bullets: [
+                    'On-Grid, Off-Grid, and Hybrid Solar Power Systems',
+                    'Capacity ranging from 1KW rooftop installations to 100MW utility-scale solar parks',
+                    'Site assessment, engineering design, and 3D modeling',
+                    'Solar panel mounting structure fabrication and installation',
+                    'Inverter, charge controller, and battery bank setup',
+                    'Integration with existing grids and synchronization',
+                    'Net metering and CEIG approvals handling'
+                ]
+            },
+            {
+                id: '6',
+                title: 'Wind Mills & Turbines',
+                description: 'Comprehensive erection and commissioning for industrial wind farm projects.',
+                image: 'assets/service_wind.jpg?v=custom_wind',
+                bullets: [
+                    'Wind turbine installation, erection, and commissioning',
+                    'Resource assessment and micro-siting of wind turbines',
+                    'Foundation design and civil works for wind turbine generators (WTGs)',
+                    'Tower assembly, nacelle, hub, and rotor blade lifting and installation',
+                    'Electrical balance of plant (E-BoP) including transformers and switchyard',
+                    'Testing, grid synchronization, and performance optimization',
+                    'Preventative maintenance and gearbox/blade repairs'
+                ]
+            },
+            {
+                id: '7',
+                title: 'Annual Maintenance Contract (AMC)',
+                description: 'Reliable long-term maintenance solutions to ensure peak performance and longevity.',
+                image: 'assets/service_amc.jpg?v=custom_amc2',
+                bullets: [
+                    '11/25/33/66/132/220/400 kV Substation',
+                    'E&I system of Thermal & Gas Power Plants',
+                    '33/11KV Ring Main Construction Power System',
+                    '11/6.6/3.3/.433 KV HT/LT Switchgear preventive maintenance',
+                    'Motor Operated Valves (MOVs)/MOD preventive maintenance',
+                    'HT/LT Motors & Power Transformers maintenance',
+                    'Control Valves & UPS/Battery Bank systems'
+                ]
+            },
+            {
+                id: '8',
+                title: 'Equipment & Tools on Rent',
+                description: 'High-performance equipment available for short-term or long-term project needs.',
+                image: 'assets/service_rent.jpg?v=custom_rent',
+                bullets: [
+                    '10KVA TO 500KVA DG Sets',
+                    'Mobile & Portable Lighting Towers',
+                    'Heavy Construction Vehicles: Hydra, Excavators, Cranes, Dumpers, Hyva, Backhoe Loaders & Bulldozers',
+                    'Specialized Testing and Commissioning Tools',
+                    '25KVA to 630KVA 11/.433KV Transformers',
+                    'Portable substations up to 1000KVA Rating'
+                ]
+            },
+            {
+                id: '9',
+                title: 'Emergency Electrical Breakdown Services',
+                description: 'Rapid response teams for critical failures and urgent repairs.',
+                image: 'assets/service_breakdown.jpg?v=custom_breakdown',
+                bullets: [
+                    'Switchgear & Switchyard troubleshooting',
+                    'HT/LT Cable fault location & repair',
+                    'Transformer leakage & oil filtration',
+                    'Relay testing and retrofitting',
+                    '24/7 technical support for industrial plants'
+                ]
+            },
+            {
+                id: '10',
+                title: 'Civil & Structural Fabrication',
+                description: 'Expert structural engineering for robust industrial foundations.',
+                image: 'assets/service_fabrication.jpg?v=ai',
+                bullets: [
+                    'Foundation design for heavy equipment',
+                    'Structural steel fabrication and erection',
+                    'Industrial sheds and warehouse construction',
+                    'Plant site development and civil works',
+                    'Substation structure and tower foundation'
+                ]
+            },
+            {
+                id: '11',
+                title: 'Liaison & Approval Services',
+                description: 'Navigating regulatory requirements and obtaining necessary certifications.',
+                image: 'assets/service_liaison.png?v=custom_v2',
+                bullets: [
+                    'Electrical Inspectorate (CEIG) approvals',
+                    'State Electricity Board (SEB) coordination',
+                    'Pollution Control Board certifications',
+                    'Preparation & submission of drawings to State/Central authorities',
+                    'Initial and Annual inspections by Electricity Authorities'
+                ]
+            }
+        ];
+
+        const plantTypes = [
+            {
+                id: 1,
+                title: 'Thermal',
+                type: 'EPC & Maintenance',
+                icon: 'flame',
+                color: 'bg-orange-500/10 text-orange-500',
+                image: 'assets/thermal.png'
+            },
+            {
+                id: 2,
+                title: 'Solar',
+                type: 'Renewable Energy',
+                icon: 'sun',
+                color: 'bg-yellow-500/10 text-yellow-500',
+                image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1920&q=80'
+            },
+            {
+                id: 3,
+                title: 'Wind',
+                type: 'Clean Energy',
+                icon: 'wind',
+                color: 'bg-blue-400/10 text-blue-400',
+                image: 'assets/wind.png'
+            },
+            {
+                id: 4,
+                title: 'Nuclear',
+                type: 'Island & Turbine Hall',
+                icon: 'zap',
+                color: 'bg-indigo-600/10 text-indigo-600',
+                image: 'assets/nuclear.png'
+            },
+            {
+                id: 5,
+                title: 'Gas & Oil',
+                type: 'Infrastructure & EPC',
+                icon: 'droplets',
+                color: 'bg-cyan-500/10 text-cyan-500',
+                image: 'assets/oil_refinery.png'
+            },
+            {
+                id: 6,
+                title: 'Steel Fabrication Plant',
+                type: 'Industrial Fabrication',
+                icon: 'hammer',
+                color: 'bg-slate-500/10 text-slate-500',
+                image: 'https://images.unsplash.com/photo-1516937941344-00b4e0337589?auto=format&fit=crop&w=1920&q=80'
+            },
+            {
+                id: 7,
+                title: 'Sugar Mills',
+                type: 'Process Engineering',
+                icon: 'factory',
+                color: 'bg-green-600/10 text-green-600',
+                image: 'assets/sugar_mill.png'
+            },
+        ];
+
+        const stats = [
+            { label: 'Years Experience', value: '30+', icon: 'award' },
+            { label: 'Projects Completed', value: '500+', icon: 'trending-up' },
+            { label: 'Global Partners', value: '50+', icon: 'globe' },
+            { label: 'Safety Record', value: '100%', icon: 'shield-check' },
+        ];
+
+        // --- Components ---
+
+        const Icon = ({ name, className }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} className={className}></i>;
+        };
+
+        const Navbar = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [scrolled, setScrolled] = useState(false);
+            const [isPastHero, setIsPastHero] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 20);
+                    setIsPastHero(window.scrollY > 500);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const navLinks = [
+                { name: 'Home', href: 'index.html#home' },
+                { name: 'About', href: 'index.html#about' },
+                { name: 'Services', href: 'services.html' },
+                { name: 'Supply', href: 'supply.html' },
+                { name: 'Energy', href: 'index.html#energy' },
+                { name: 'Contact', href: 'index.html#contact' },
+            ];
+
+            return (
+                <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isPastHero ? 'nav-scrolled py-2' : (scrolled ? 'nav-hero py-2.5 shadow-xl' : 'bg-transparent py-4')}`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-5">
+                                <img src="assets/logo.png?v=custom_logo" alt="GEE Logo" className="w-24 h-24 object-contain" />
+                                <img src="assets/logo_text.png" alt="Global Engineering Enterprises" className="h-14 w-auto object-contain ml-3" />
+                            </div>
+
+                            <div className="hidden md:flex items-center space-x-8">
+                                {navLinks.map((link) => (
+                                    <a
+                                        key={link.name}
+                                        href={link.href}
+                                        className="text-sm font-medium transition-colors hover:text-teal-500 text-white/90"
+                                    >
+                                        {link.name}
+                                    </a>
+                                ))}
+                                <a href="#contact" className="px-5 py-2.5 bg-teal-600 text-white rounded-full text-sm font-semibold hover:bg-teal-700 transition-all shadow-lg shadow-teal-500/30">
+                                    Get in Touch
+                                </a>
+                            </div>
+
+                            <div className="md:hidden">
+                                <button onClick={() => setIsOpen(!isOpen)} className="text-white">
+                                    {isOpen ? <Icon name="x" /> : <Icon name="menu" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isOpen && (
+                        <div className="md:hidden bg-slate-900 border-b border-white/10 overflow-hidden shadow-2xl">
+                            <div className="px-4 py-6 space-y-4">
+                                {navLinks.map((link) => (
+                                    <a key={link.name} href={link.href} onClick={() => setIsOpen(false)} className="block text-lg font-medium text-white/90 hover:text-teal-400">
+                                        {link.name}
+                                    </a>
+                                ))}
+                                <a href="#contact" onClick={() => setIsOpen(false)} className="block w-full text-center py-3 bg-teal-600 text-white rounded-lg font-semibold">
+                                    Contact Us
+                                </a>
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const Hero = () => (
+            <section id="home" className="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden bg-slate-900">
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
+                    <div className="absolute inset-0 bg-industrial-fixed"></div>
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div data-aos="fade-right">
+                            <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-teal-400 uppercase bg-teal-400/10 rounded-full">
+                                Excellence in Engineering
+                            </span>
+                            <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+                                Powering the <span className="text-gradient">Future</span> of Global Infrastructure
+                            </h1>
+                            <p className="text-lg text-slate-300 mb-10 leading-relaxed max-w-xl">
+                                Global Engineering Enterprises delivers world-class solutions across the entire lifecycle of power and industrial plants. From concept to commissioning, we build the foundations of progress.
+                            </p>
+                            <div className="flex flex-wrap gap-4">
+                                <a href="services.html" className="px-8 py-4 bg-teal-600 text-white rounded-xl font-bold text-lg hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20 flex items-center gap-2 group">
+                                    Our Services
+                                    <Icon name="arrow-right" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                </a>
+                                <a href="supply.html" className="px-8 py-4 bg-white/10 text-white border border-white/20 backdrop-blur-sm rounded-xl font-bold text-lg hover:bg-white/20 transition-all flex items-center gap-2 group">
+                                    Equipment Supply
+                                    <Icon name="box" className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                </a>
+                            </div>
+                        </div>
+                        <div data-aos="zoom-in" className="hidden lg:block relative">
+                            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10">
+                                <img src="assets/Industrial sunrise over diverse power plants.png?v=hero_v1" alt="GEE Industrial Ecosystem" className="w-full h-auto" />
+                            </div>
+                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-600/20 blur-3xl rounded-full"></div>
+                            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-600/20 blur-3xl rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Services = () => (
+            <section id="services" className="py-24 bg-white overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-20" data-aos="fade-up">
+                        <h2 className="text-teal-600 font-bold tracking-widest uppercase text-sm mb-3">Comprehensive Expertise</h2>
+                        <h3 className="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-6">Our Engineering Services</h3>
+                        <div className="w-20 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
+                    </div>
+
+                    <div className="space-y-20">
+                        {serviceCategories.map((category, idx) => (
+                            <div
+                                key={category.id}
+                                className={`flex flex-col lg:flex-row gap-12 items-center ${idx % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
+                            >
+                                <div className="lg:w-1/2" data-aos={idx % 2 === 0 ? "fade-right" : "fade-left"}>
+                                    <div className="relative group">
+                                        <div className="absolute -inset-4 bg-teal-500/10 rounded-[2rem] blur-2xl group-hover:bg-teal-500/20 transition-all duration-500"></div>
+                                        <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                                            <img
+                                                src={category.image}
+                                                alt={category.title}
+                                                className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                                            <div className="absolute bottom-8 left-8">
+                                                <span className="text-6xl font-black text-white/20">{category.id}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="lg:w-1/2" data-aos={idx % 2 === 0 ? "fade-left" : "fade-right"}>
+                                    <h4 className="text-3xl font-bold text-slate-900 mb-4">{category.title}</h4>
+                                    <p className="text-lg text-slate-600 mb-8 leading-relaxed">{category.description}</p>
+
+                                    <div className="grid sm:grid-cols-2 gap-4">
+                                        {category.bullets.map((bullet, bIdx) => (
+                                            <div key={bIdx} className="flex items-start gap-3 group">
+                                                <div className="mt-1.5 w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0 group-hover:bg-teal-500 transition-colors">
+                                                    <Icon name="check" className="w-3 h-3 text-teal-600 group-hover:text-white transition-colors" />
+                                                </div>
+                                                <span className="text-slate-700 text-sm font-medium leading-tight group-hover:text-teal-600 transition-colors">
+                                                    {bullet}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Energy = () => {
+            const [activeBg, setActiveBg] = useState(null);
+
+            return (
+                <section id="energy" className="py-24 bg-slate-900 relative overflow-hidden transition-colors duration-700">
+                    {/* Dynamic Background Image */}
+                    <div
+                        className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+                        style={{
+                            backgroundImage: activeBg ? `url(${activeBg})` : 'none',
+                            opacity: activeBg ? 0.6 : 0
+                        }}
+                    ></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/60 pointer-events-none"></div>
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div className="text-center mb-20 relative z-20">
+                            <h2 className="text-teal-400 font-bold tracking-widest uppercase text-sm mb-3 shadow-sm">Sustainable Energy</h2>
+                            <h3 className="text-4xl lg:text-5xl font-extrabold text-white mb-6 drop-shadow-md">Powering Every Source</h3>
+                            <p className="text-slate-300 max-w-2xl mx-auto drop-shadow">From traditional thermal plants to cutting-edge renewable energy solutions, we have the expertise to build the future of power generation.</p>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center gap-8 lg:gap-12 relative z-20">
+                            {plantTypes.map((plant, idx) => (
+                                <div
+                                    key={plant.id}
+                                    data-aos="zoom-in"
+                                    data-aos-delay={idx * 100}
+                                    className="group text-center cursor-pointer w-[120px] lg:w-40"
+                                    onClick={() => setActiveBg(plant.image)}
+                                >
+                                    <div className="relative mb-6 mx-auto w-28 h-28 lg:w-40 lg:h-40">
+                                        <div className={`absolute inset-0 ${plant.color} rounded-full group-hover:scale-110 transition-transform duration-500 ring-2 ring-transparent group-hover:ring-white/20`}></div>
+                                        <div className="relative z-10 w-full h-full flex items-center justify-center">
+                                            <Icon name={plant.icon} className="w-10 h-10 lg:w-16 lg:h-16 text-teal-300 group-hover:text-white transition-colors duration-300" />
+                                        </div>
+                                    </div>
+                                    <h5 className="text-lg lg:text-xl font-bold text-white mb-2 group-hover:text-teal-300 transition-colors">{plant.title}</h5>
+                                    <p className="text-xs lg:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">{plant.type}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const About = () => (
+            <section id="about" className="py-24 bg-slate-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <div data-aos="fade-right">
+                            <h2 className="text-teal-600 font-bold tracking-widest uppercase text-sm mb-3">About GEE</h2>
+                            <h3 className="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-8 leading-tight">Decades of Engineering Excellence</h3>
+                            <p className="text-slate-600 text-lg mb-8 leading-relaxed">
+                                Global Engineering Enterprises is a professionally managed E&I Service Provider Company, pioneered in engineering, supply, installation, erection, testing, and commissioning across Solar, Thermal, Steel, Oil & Gas, and Nuclear sectors. With a high level of competency, GEE offers comprehensive solutions for electrical, mechanical, and instrumentation projects from 'concept to commissioning,' including operation, maintenance, and AMCs, while maintaining focus on both functional and aesthetic requirements. Our lump sum turnkey contract services, provided on a 'single source responsibility' basis, offer complete peace of mind to our clients and ensure the mitigation of all performance risks.
+                            </p>
+                            <div className="grid grid-cols-2 gap-8 mb-10">
+                                {stats.map((stat) => (
+                                    <div key={stat.label}>
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <Icon name={stat.icon} className="w-5 h-5 text-teal-600" />
+                                            <span className="text-4xl font-extrabold text-slate-900">{stat.value}</span>
+                                        </div>
+                                        <span className="text-slate-500 font-semibold uppercase text-xs tracking-wider">{stat.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <button className="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg">Learn Our Story</button>
+                        </div>
+                        <div data-aos="fade-left" className="relative">
+                            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1350&q=80" alt="Engineering Team" className="rounded-3xl shadow-2xl relative z-10" />
+                            <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-teal-500/10 rounded-full -z-0"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const SpecificationModal = ({ category, onClose }) => {
+            if (!category) return null;
+
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+                    <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-md" onClick={onClose}></div>
+                    <div
+                        className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
+                    >
+                        <div className="relative h-64 sm:h-80 overflow-hidden">
+                            <img src={category.image} alt={category.title} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+                            <button
+                                onClick={onClose}
+                                className="absolute top-6 right-6 w-12 h-12 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center text-slate-900 transition-all border border-white/30"
+                            >
+                                <Icon name="x" className="w-6 h-6" />
+                            </button>
+                            <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-10">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="p-3 bg-teal-500 rounded-2xl text-white shadow-xl shadow-teal-500/20">
+                                        <Icon name={category.icon} className="w-6 h-6" />
+                                    </div>
+                                    <span className="px-4 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-bold uppercase tracking-widest">Technical Specs</span>
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl font-black text-slate-900">{category.title}</h2>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-8 sm:p-10 no-scrollbar">
+                            <div className="grid md:grid-cols-2 gap-10">
+                                <div>
+                                    <h3 className="text-sm font-bold text-teal-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-teal-500"></div>
+                                        Product Details
+                                    </h3>
+                                    <div className="space-y-6">
+                                        {Object.entries(category.specs).map(([key, value]) => (
+                                            <div key={key} className="group">
+                                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-hover:text-teal-500 transition-colors">{key.replace('_', ' ')}</p>
+                                                <p className="text-slate-800 font-semibold leading-relaxed">{value}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-sm font-bold text-teal-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-teal-500"></div>
+                                        Included Items
+                                    </h3>
+                                    <div className="grid gap-3">
+                                        {category.items.map((item, idx) => (
+                                            <div key={idx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-4 group hover:bg-teal-50 hover:border-teal-100 transition-all">
+                                                <div className="w-2 h-2 rounded-full bg-teal-400 group-hover:scale-125 transition-transform"></div>
+                                                <span className="text-slate-700 font-medium text-sm">{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="mt-10 p-6 bg-teal-600 rounded-3xl text-white shadow-xl shadow-teal-600/20">
+                                        <p className="text-sm font-medium opacity-90 mb-4">Need detailed drawings or a customized quote for this equipment?</p>
+                                        <a href="#contact" onClick={onClose} className="inline-flex items-center gap-2 bg-white text-teal-600 px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all shadow-lg">
+                                            Contact Expert
+                                            <Icon name="external-link" className="w-4 h-4" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Supply = () => {
+            const [selectedCategory, setSelectedCategory] = useState(null);
+
+            return (
+                <section id="supply" className="py-24 bg-slate-50 overflow-hidden relative">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16" data-aos="fade-up">
+                            <h2 className="text-teal-600 font-bold tracking-widest uppercase text-sm mb-3">Inventory & Supply</h2>
+                            <h3 className="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-6">Industrial Material & Equipment</h3>
+                            <div className="w-20 h-1.5 bg-teal-500 mx-auto rounded-full mb-8"></div>
+                            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                                We supply an extensive range of high-performance engineering components, from extra-high voltage transformers to precision automation systems.
+                            </p>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {supplyCategories.map((category, idx) => (
+                                <div
+                                    key={category.id}
+                                    data-aos="fade-up"
+                                    data-aos-delay={idx * 50}
+                                    className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col"
+                                >
+                                    <div className="relative h-64 overflow-hidden">
+                                        <img
+                                            src={category.image}
+                                            alt={category.title}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+                                        <div className="absolute bottom-6 left-6 right-6">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-teal-500 rounded-lg text-white shadow-lg">
+                                                    <Icon name={category.icon} className="w-5 h-5" />
+                                                </div>
+                                                <h4 className="text-xl font-bold text-white leading-tight">{category.title}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-8 flex-1">
+                                        <ul className="space-y-4">
+                                            {category.items.slice(0, 4).map((item, iIdx) => (
+                                                <li key={iIdx} className="flex items-start gap-3 group">
+                                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-teal-400 group-hover:scale-150 transition-transform"></div>
+                                                    <span className="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-teal-600 transition-colors">
+                                                        {item}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="px-8 pb-8">
+                                        <div className="pt-6 border-t border-slate-50">
+                                            <button
+                                                onClick={() => setSelectedCategory(category)}
+                                                className="w-full py-3 bg-slate-50 text-teal-600 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-teal-600 hover:text-white transition-all group shadow-sm"
+                                            >
+                                                View Specifications
+                                                <Icon name="arrow-up-right" className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {selectedCategory && (
+                            <SpecificationModal
+                                category={selectedCategory}
+                                onClose={() => setSelectedCategory(null)}
+                            />
+                        )}
+
+                        <div className="mt-20 p-12 bg-slate-900 rounded-[3rem] text-center relative overflow-hidden shadow-2xl" data-aos="zoom-in">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 blur-3xl rounded-full -mr-32 -mt-32"></div>
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 blur-3xl rounded-full -ml-32 -mb-32"></div>
+
+                            <div className="relative z-10">
+                                <h4 className="text-3xl font-bold text-white mb-4">Need a Detailed Product Catalog?</h4>
+                                <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-lg">
+                                    We supply over 500+ specialized engineering components. Contact our procurement team for technical specifications and quotes.
+                                </p>
+                                <div className="flex flex-wrap justify-center gap-4">
+                                    <a href="#contact" className="px-8 py-4 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20">
+                                        Request a Quote
+                                    </a>
+                                    <button className="px-8 py-4 bg-white/10 text-white border border-white/20 rounded-xl font-bold hover:bg-white/20 transition-all flex items-center gap-2">
+                                        <Icon name="download" className="w-5 h-5" />
+                                        Download Supply List
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const Contact = () => (
+            <section id="contact" className="py-24 bg-slate-900 text-white overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid lg:grid-cols-2 gap-16">
+                        <div data-aos="fade-right">
+                            <h2 className="text-teal-400 font-bold tracking-widest uppercase text-sm mb-3">Get In Touch</h2>
+                            <h3 className="text-4xl lg:text-5xl font-extrabold mb-8">Ready to Start Your Next Big Project?</h3>
+                            <p className="text-slate-400 text-lg mb-10 leading-relaxed max-w-xl">
+                                Contact our expert team today for a comprehensive consultation on your engineering needs. We're here to help you build the future.
+                            </p>
+
+                            <div className="space-y-8">
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-14 h-14 bg-teal-500/10 rounded-2xl flex items-center justify-center border border-teal-500/20 group-hover:bg-teal-500 transition-all">
+                                        <Icon name="mail" className="text-teal-400 w-6 h-6 group-hover:text-white" />
+                                    </div>
+                                    <div>
+                                        <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Email Us</h5>
+                                        <p className="text-xl font-bold">global.engr.in@gmail.com</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-14 h-14 bg-teal-500/10 rounded-2xl flex items-center justify-center border border-teal-500/20 group-hover:bg-teal-500 transition-all">
+                                        <Icon name="phone" className="text-teal-400 w-6 h-6 group-hover:text-white" />
+                                    </div>
+                                    <div>
+                                        <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Call Us</h5>
+                                        <p className="text-xl font-bold">+91 8875546393 / +91 9106445896</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-14 h-14 bg-teal-500/10 rounded-2xl flex items-center justify-center border border-teal-500/20 group-hover:bg-teal-500 transition-all">
+                                        <Icon name="globe" className="text-teal-400 w-6 h-6 group-hover:text-white" />
+                                    </div>
+                                    <div>
+                                        <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Office & Web</h5>
+                                        <p className="text-xl font-bold">www.gee.org.in</p>
+                                        <p className="text-xs text-slate-500 font-bold tracking-widest mt-1 uppercase">GST: 09EGBPP7158H12Y</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-aos="fade-left" className="bg-white/5 p-8 lg:p-12 rounded-[2.5rem] border border-white/10 backdrop-blur-sm shadow-2xl">
+                            <form className="space-y-6">
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-bold text-slate-400 uppercase tracking-widest">First Name</label>
+                                        <input type="text" placeholder="John" className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-teal-500 focus:outline-none transition-all text-white" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-bold text-slate-400 uppercase tracking-widest">Last Name</label>
+                                        <input type="text" placeholder="Doe" className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-teal-500 focus:outline-none transition-all text-white" />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
+                                    <input type="email" placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-teal-500 focus:outline-none transition-all text-white" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-slate-400 uppercase tracking-widest">Message</label>
+                                    <textarea rows="4" placeholder="Tell us about your project..." className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-teal-500 focus:outline-none transition-all text-white"></textarea>
+                                </div>
+                                <button type="submit" className="w-full py-5 bg-teal-600 text-white rounded-xl font-bold text-lg hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20">Send Inquiry</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Footer = () => (
+            <footer className="bg-slate-900 border-t border-white/5 py-16">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                        <div>
+                            <div className="flex items-center gap-5 mb-8">
+                                <img src="assets/logo.png?v=custom_logo" alt="GEE Logo" className="w-24 h-24 object-contain" />
+                                <img src="assets/logo_text.png" alt="Global Engineering Enterprises" className="h-14 w-auto object-contain ml-3" />
+                            </div>
+                            <p className="text-slate-400 leading-relaxed mb-8">
+                                Global Engineering Enterprises: Leading the way in EPC services, plant installation, and sustainable infrastructure for 30+ years.
+                            </p>
+                            <div className="flex gap-4">
+                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-teal-600 transition-all text-white">
+                                    <Icon name="facebook" className="w-5 h-5" />
+                                </a>
+                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-teal-600 transition-all text-white">
+                                    <Icon name="twitter" className="w-5 h-5" />
+                                </a>
+                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-teal-600 transition-all text-white">
+                                    <Icon name="linkedin" className="w-5 h-5" />
+                                </a>
+                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-teal-600 transition-all text-white">
+                                    <Icon name="instagram" className="w-5 h-5" />
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 className="text-white font-bold mb-8 uppercase tracking-widest text-sm">Quick Links</h5>
+                            <ul className="space-y-4">
+                                <li><a href="index.html#home" className="text-slate-400 hover:text-teal-400 transition-colors">Home</a></li>
+                                <li><a href="index.html#about" className="text-slate-400 hover:text-teal-400 transition-colors">About Us</a></li>
+                                <li><a href="services.html" className="text-slate-400 hover:text-teal-400 transition-colors">Services</a></li>
+                                <li><a href="supply.html" className="text-slate-400 hover:text-teal-400 transition-colors">Supply</a></li>
+                                <li><a href="index.html#energy" className="text-slate-400 hover:text-teal-400 transition-colors">Energy</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h5 className="text-white font-bold mb-8 uppercase tracking-widest text-sm">Services</h5>
+                            <ul className="space-y-4">
+                                <li><a href="services.html" className="text-slate-400 hover:text-teal-400 transition-colors">EPC Projects</a></li>
+                                <li><a href="services.html" className="text-slate-400 hover:text-teal-400 transition-colors">Installation</a></li>
+                                <li><a href="services.html" className="text-slate-400 hover:text-teal-400 transition-colors">Fabrication</a></li>
+                                <li><a href="services.html" className="text-slate-400 hover:text-teal-400 transition-colors">Plant O&M</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h5 className="text-white font-bold mb-8 uppercase tracking-widest text-sm">Newsletter</h5>
+                            <p className="text-slate-400 mb-6 text-sm">Stay updated with our latest industrial insights.</p>
+                            <div className="flex gap-2">
+                                <input type="email" placeholder="Email" className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-teal-500 flex-1" />
+                                <button className="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
+                                    <Icon name="arrow-right" className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-8 border-t border-white/5 text-center text-slate-500 text-sm">
+                        <p>&copy; {new Date().getFullYear()} Global Engineering Enterprises. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        const App = () => {
+            useEffect(() => {
+                try {
+                    if (window.AOS) {
+                        window.AOS.init({
+                            duration: 800,
+                            once: true,
+                        });
+                    }
+                } catch (e) {
+                    console.error("AOS init error:", e);
+                }
+            }, []);
+
+            return (
+                <div className="min-h-screen">
+                    <Navbar />
+                    <Hero />
+                    <About />
+                    <Energy />
+                    <Contact />
+                    <Footer />
+                </div>
+            );
+        };
+
+        // Ensure DOM is ready before rendering
+        const renderApp = () => {
+            const container = document.getElementById('root');
+            if (!container) {
+                console.error("Root element not found");
+                return;
+            }
+            try {
+                const root = ReactDOM.createRoot(container);
+                root.render(<App />);
+            } catch (e) {
+                console.error("Render error:", e);
+                container.innerHTML = `<div style="padding: 20px; color: red;">Error loading website. Please refresh or check console.</div>`;
+            }
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderApp);
+        } else {
+            renderApp();
+        }
+    </script>
+</body>
+
+</html>

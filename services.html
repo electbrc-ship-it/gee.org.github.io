@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Services | Global Engineering Enterprises</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    
+    <!-- Scripts & Styles -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .bg-industrial-fixed {
+            background-image: url('assets/Industrial sunset with working machinery.png?v=bg_v2');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .nav-hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.4)), url('assets/Industrial sunset with working machinery.png?v=bg_v2');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center top;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-scrolled {
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #0d9488 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Data ---
+        const serviceCategories = [
+            {
+                id: '1',
+                title: 'Installation',
+                description: 'Expert erection and installation of critical industrial and power systems infrastructure.',
+                image: 'assets/service_installation.jpg',
+                bullets: [
+                    'Substation 11/25/33/66/132/400KV equipment erection',
+                    'Over Head/Underground transmission lines laying',
+                    'HT/LT Cable laying, jointing and terminations',
+                    'Plant earthing and lightening protection systems',
+                    'Installation of HT/LT Panels, LBS, RMU, Transformers',
+                    'Equipment material handling and alignment'
+                ]
+            },
+            {
+                id: '2',
+                title: 'Testing',
+                description: 'Comprehensive diagnostic and performance testing for electrical and mechanical systems.',
+                image: 'assets/service_testing.jpg?v=custom',
+                bullets: [
+                    'Pre-commissioning testing of HT/LT panels and switchgears',
+                    'Relay testing and retrofitting',
+                    'Transformer oil filtration and testing',
+                    'Cable fault location and diagnostics',
+                    'Motor Operated Valves (MOVs) & Dampers (MODs) testing'
+                ]
+            },
+            {
+                id: '3',
+                title: 'Commissioning',
+                description: 'Systematic procedures to ensure all components of the industrial plant perform according to design objectives.',
+                image: 'assets/service_commissioning.jpg?v=custom2',
+                bullets: [
+                    'Pre-commissioning & Commissioning procedures execution',
+                    'Back charging plan and implementation',
+                    'Start up & Shutdown procedures coordination',
+                    'System integration and functional checks',
+                    'Performance evaluation and handover'
+                ]
+            },
+            {
+                id: '4',
+                title: 'Operation & Maintenance (O&M)',
+                description: 'End-to-end operation management and maintenance of power systems to ensure zero downtime.',
+                image: 'assets/service_onm.jpg?v=custom_onm',
+                bullets: [
+                    'Preventative & Breakdown Maintenance',
+                    'Control room/DCS Panel operation',
+                    '24/7 technical support for industrial plants',
+                    'Routine checking of HT/LT Motors and Transformers',
+                    'Plant illumination and lighting maintanance'
+                ]
+            },
+            {
+                id: '5',
+                title: 'Solar Power Systems',
+                description: 'End-to-end installation of Hybrid, On-Grid, and Off-Grid solar energy systems.',
+                image: 'assets/service_solar.jpg?v=custom_solar',
+                bullets: [
+                    'On-Grid, Off-Grid, and Hybrid Solar Power Systems',
+                    'Capacity ranging from 1KW rooftop installations to 100MW utility-scale solar parks',
+                    'Site assessment, engineering design, and 3D modeling',
+                    'Solar panel mounting structure fabrication and installation',
+                    'Inverter, charge controller, and battery bank setup',
+                    'Integration with existing grids and synchronization',
+                    'Net metering and CEIG approvals handling'
+                ]
+            },
+            {
+                id: '6',
+                title: 'Wind Mills & Turbines',
+                description: 'Comprehensive erection and commissioning for industrial wind farm projects.',
+                image: 'assets/service_wind.jpg?v=custom_wind',
+                bullets: [
+                    'Wind turbine installation, erection, and commissioning',
+                    'Resource assessment and micro-siting of wind turbines',
+                    'Foundation design and civil works for wind turbine generators (WTGs)',
+                    'Tower assembly, nacelle, hub, and rotor blade lifting and installation',
+                    'Electrical balance of plant (E-BoP) including transformers and switchyard',
+                    'Testing, grid synchronization, and performance optimization',
+                    'Preventative maintenance and gearbox/blade repairs'
+                ]
+            },
+            {
+                id: '7',
+                title: 'Annual Maintenance Contract (AMC)',
+                description: 'Reliable long-term maintenance solutions to ensure peak performance and longevity.',
+                image: 'assets/service_amc.jpg?v=custom_amc2',
+                bullets: [
+                    '11/25/33/66/132/220/400 kV Substation',
+                    'E&I system of Thermal & Gas Power Plants',
+                    '33/11KV Ring Main Construction Power System',
+                    '11/6.6/3.3/.433 KV HT/LT Switchgear preventive maintenance',
+                    'Motor Operated Valves (MOVs)/MOD preventive maintenance',
+                    'HT/LT Motors & Power Transformers maintenance',
+                    'Control Valves & UPS/Battery Bank systems'
+                ]
+            },
+            {
+                id: '8',
+                title: 'Equipment & Tools on Rent',
+                description: 'High-performance equipment available for short-term or long-term project needs.',
+                image: 'assets/service_rent.jpg?v=custom_rent',
+                bullets: [
+                    '10KVA TO 500KVA DG Sets',
+                    'Mobile & Portable Lighting Towers',
+                    'Heavy Construction Vehicles: Hydra, Excavators, Cranes, Dumpers, Hyva, Backhoe Loaders & Bulldozers',
+                    'Specialized Testing and Commissioning Tools',
+                    '25KVA to 630KVA 11/.433KV Transformers',
+                    'Portable substations up to 1000KVA Rating'
+                ]
+            },
+            {
+                id: '9',
+                title: 'Emergency Electrical Breakdown Services',
+                description: 'Rapid response teams for critical failures and urgent repairs.',
+                image: 'assets/service_breakdown.jpg?v=custom_breakdown',
+                bullets: [
+                    'Switchgear & Switchyard troubleshooting',
+                    'HT/LT Cable fault location & repair',
+                    'Transformer leakage & oil filtration',
+                    'Relay testing and retrofitting',
+                    '24/7 technical support for industrial plants'
+                ]
+            },
+            {
+                id: '10',
+                title: 'Civil & Structural Fabrication',
+                description: 'Expert structural engineering for robust industrial foundations.',
+                image: 'assets/service_fabrication.jpg?v=ai',
+                bullets: [
+                    'Foundation design for heavy equipment',
+                    'Structural steel fabrication and erection',
+                    'Industrial sheds and warehouse construction',
+                    'Plant site development and civil works',
+                    'Substation structure and tower foundation'
+                ]
+            },
+            {
+                id: '11',
+                title: 'Liaison & Approval Services',
+                description: 'Navigating regulatory requirements and obtaining necessary certifications.',
+                image: 'assets/service_liaison.png?v=custom_v2',
+                bullets: [
+                    'Electrical Inspectorate (CEIG) approvals',
+                    'State Electricity Board (SEB) coordination',
+                    'Pollution Control Board certifications',
+                    'Preparation & submission of drawings to State/Central authorities',
+                    'Initial and Annual inspections by Electricity Authorities'
+                ]
+            }
+        ];
+
+        // --- Components ---
+
+        const Icon = ({ name, className }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} className={className}></i>;
+        };
+
+        const Navbar = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [scrolled, setScrolled] = useState(false);
+            const [isPastHero, setIsPastHero] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 20);
+                    setIsPastHero(window.scrollY > 400);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const navLinks = [
+                { name: 'Home', href: 'index.html#home' },
+                { name: 'About', href: 'index.html#about' },
+                { name: 'Services', href: 'services.html' },
+                { name: 'Supply', href: 'supply.html' },
+                { name: 'Energy', href: 'index.html#energy' },
+                { name: 'Contact', href: 'index.html#contact' },
+            ];
+
+            return (
+                <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isPastHero ? 'nav-scrolled py-2' : (scrolled ? 'nav-hero py-2.5' : 'bg-transparent py-4')}`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-5">
+                                <img src="assets/logo.png?v=custom_logo" alt="GEE Logo" className="w-24 h-24 object-contain" />
+                                <img src="assets/logo_text.png" alt="Global Engineering Enterprises" className="h-14 w-auto object-contain ml-3" />
+                            </div>
+                            
+                            <div className="hidden md:flex items-center space-x-8">
+                                {navLinks.map((link) => (
+                                    <a 
+                                        key={link.name} 
+                                        href={link.href} 
+                                        className={`text-sm font-medium transition-colors hover:text-teal-500 ${link.name === 'Services' ? 'text-teal-400 font-bold' : 'text-white/90'}`}
+                                    >
+                                        {link.name}
+                                    </a>
+                                ))}
+                                <a href="index.html#contact" className="px-5 py-2.5 bg-teal-600 text-white rounded-full text-sm font-semibold hover:bg-teal-700 transition-all shadow-lg shadow-teal-500/30">
+                                    Get in Touch
+                                </a>
+                            </div>
+
+                            <div className="md:hidden">
+                                <button onClick={() => setIsOpen(!isOpen)} className="text-white">
+                                    {isOpen ? <Icon name="x" /> : <Icon name="menu" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {isOpen && (
+                        <div className="md:hidden bg-slate-900 border-b border-white/10 overflow-hidden shadow-2xl">
+                            <div className="px-4 py-6 space-y-4">
+                                {navLinks.map((link) => (
+                                    <a key={link.name} href={link.href} onClick={() => setIsOpen(false)} className={`block text-lg font-medium ${link.name === 'Services' ? 'text-teal-400' : 'text-white/90'} hover:text-teal-400`}>
+                                        {link.name}
+                                    </a>
+                                ))}
+                                <a href="index.html#contact" onClick={() => setIsOpen(false)} className="block w-full text-center py-3 bg-teal-600 text-white rounded-lg font-semibold">
+                                    Contact Us
+                                </a>
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const ServicesPageHero = () => (
+            <section className="relative pt-32 pb-20 bg-slate-900 overflow-hidden">
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
+                    <div className="absolute inset-0 bg-industrial-fixed"></div>
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                    <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-teal-400 uppercase bg-teal-400/10 rounded-full">
+                        Expert Solutions
+                    </span>
+                    <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+                        Our Engineering <span className="text-gradient">Services</span>
+                    </h1>
+                    <p className="text-lg text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto">
+                        Comprehensive solutions across the entire lifecycle of power and industrial plants. From concept to commissioning.
+                    </p>
+                </div>
+            </section>
+        );
+
+        const ServicesList = () => (
+            <section className="py-24 bg-white overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="space-y-24">
+                        {serviceCategories.map((category, idx) => (
+                            <div 
+                                key={category.id}
+                                className={`flex flex-col lg:flex-row gap-16 items-center ${idx % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
+                            >
+                                <div className="lg:w-1/2" data-aos={idx % 2 === 0 ? "fade-right" : "fade-left"}>
+                                    <div className="relative group">
+                                        <div className="absolute -inset-4 bg-teal-500/10 rounded-[2.5rem] blur-2xl group-hover:bg-teal-500/20 transition-all duration-500"></div>
+                                        <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-slate-100">
+                                            <img 
+                                                src={category.image} 
+                                                alt={category.title} 
+                                                className="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-105"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                                            <div className="absolute bottom-10 left-10">
+                                                <span className="text-7xl font-black text-white/20">{category.id.padStart(2, '0')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="lg:w-1/2" data-aos={idx % 2 === 0 ? "fade-left" : "fade-right"}>
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 text-teal-600 text-xs font-bold uppercase tracking-widest mb-6 border border-teal-100">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-teal-500"></div>
+                                        Core Capability
+                                    </div>
+                                    <h2 className="text-4xl font-extrabold text-slate-900 mb-6">{category.title}</h2>
+                                    <p className="text-lg text-slate-600 mb-10 leading-relaxed">{category.description}</p>
+                                    
+                                    <div className="grid sm:grid-cols-1 gap-6">
+                                        {category.bullets.map((bullet, bIdx) => (
+                                            <div key={bIdx} className="flex items-start gap-4 group">
+                                                <div className="mt-1 w-6 h-6 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0 group-hover:bg-teal-500 transition-all">
+                                                    <Icon name="check" className="w-3.5 h-3.5 text-teal-600 group-hover:text-white transition-colors" />
+                                                </div>
+                                                <span className="text-slate-700 font-semibold leading-relaxed group-hover:text-teal-600 transition-colors">
+                                                    {bullet}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    <div className="mt-12">
+                                        <a href="index.html#contact" className="inline-flex items-center gap-2 text-teal-600 font-bold hover:gap-4 transition-all group">
+                                            Discuss this Service
+                                            <Icon name="arrow-right" className="w-5 h-5" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        const ContactSummary = () => (
+            <section className="py-24 bg-slate-900 text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 className="text-4xl font-bold mb-8">Ready to Start Your Project?</h2>
+                    <p className="text-slate-400 mb-10 max-w-2xl mx-auto">Contact our expert team today for a comprehensive consultation on your engineering needs.</p>
+                    <a href="index.html#contact" className="px-10 py-5 bg-teal-600 text-white rounded-xl font-bold text-lg hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20">
+                        Get in Touch
+                    </a>
+                </div>
+            </section>
+        );
+
+        const Footer = () => (
+            <footer className="bg-slate-900 border-t border-white/5 py-8 text-center text-slate-400">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <p>
+                        Get in touch: <a href="mailto:global.engr.in@gmail.com" className="text-teal-400 hover:text-teal-300">global.engr.in@gmail.com</a> | <span className="text-white">+91 8875546393</span>
+                    </p>
+                </div>
+            </footer>
+        );
+
+        const App = () => {
+            useEffect(() => {
+                if (window.AOS) {
+                    window.AOS.init({
+                        duration: 800,
+                        once: true,
+                    });
+                }
+            }, []);
+
+            return (
+                <div className="min-h-screen">
+                    <Navbar />
+                    <ServicesPageHero />
+                    <ServicesList />
+                    <ContactSummary />
+                    <Footer />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
+
